@@ -45,7 +45,7 @@ public class MailHandler {
 
     public void handle(Message message) {
         try {
-            if (!message.getSubject().contains("Watchlist"))
+            if (message.getSubject() != null && !message.getSubject().contains("Watchlist"))
                 return;
 
             Date receivedDate = message.getReceivedDate();
@@ -54,6 +54,8 @@ public class MailHandler {
                 log.debug("Mail from {} already exists. Skip!", receivedDate);
                 return;
             }
+
+            log.debug("Handling Mail from {}.", receivedDate);
 
             handleAttachments(message);
 
@@ -90,6 +92,9 @@ public class MailHandler {
         String line;
         String fileName = part.getFileName();
         br = new BufferedReader(new InputStreamReader(part.getInputStream()));
+        line = br.readLine();
+        String stockDate = clean(line.split(";")[0]).replace("Depotbewertung vom", "");
+
         while (!br.readLine().startsWith("\"WP-Art\""));
         while ((line = br.readLine()) != null) {
             if (line.startsWith("\"\""))
@@ -98,7 +103,6 @@ public class MailHandler {
             String stockType  = clean(values[0]);
             String stockIsin  = clean(values[1]);
             String stockName  = clean(values[2]);
-            String stockDate  = clean(values[9]);
             String stockValue = clean(values[10]);
             stockService.handleStock(stockType, stockIsin, stockName, stockDate, stockValue);
         }

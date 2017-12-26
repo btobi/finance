@@ -4,6 +4,7 @@ import de.tum.models.Stock;
 import de.tum.models.StockValue;
 import de.tum.repositories.StockRepository;
 import de.tum.repositories.StockValueRepository;
+import de.tum.utils.Formatters;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class StockService {
     @Autowired
     private StockValueRepository stockValueRepository;
 
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
     private static NumberFormat numberFormat = NumberFormat.getInstance(Locale.GERMAN);
 
@@ -34,12 +35,15 @@ public class StockService {
             stock = Stock.builder().isin(isin).type(type).name(name).build();
             log.info("Save new Stock {}", stock.toString());
             stockRepository.save(stock);
+        } else {
+            log.debug("Stock already exists in db: {}", stock.toString());
         }
 
         Date parsedDate = null;
 
         try {
-            parsedDate = dateFormat.parse(date);
+            parsedDate = Formatters.dateFormatLong.parse(date);
+            log.debug("{} {}", parsedDate, date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -55,6 +59,8 @@ public class StockService {
             stockValue = StockValue.builder().stock(stock).date(parsedDate).value(parsedValue).build();
             log.info("Save new Stock Value {}", stockValue.toString());
             stockValueRepository.save(stockValue);
+        } else {
+            log.debug("StockValue already exists in db: {}", stockValue.toString());
         }
 
 

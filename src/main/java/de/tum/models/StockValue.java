@@ -35,4 +35,8 @@ public class StockValue {
         return Stream.of("[StockValue]: ", stock.toString(), date.toString(), value / 1000 + "").collect(Collectors.joining(" "));
     }
 
+    public Double getRealValue() {
+        return Math.round(value.doubleValue() / 100d) / 10d;
+    }
+
 }

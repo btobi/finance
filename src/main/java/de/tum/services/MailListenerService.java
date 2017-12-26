@@ -72,7 +72,7 @@ public class MailListenerService {
             });
 
             ensureOpen(inbox, username, password);
-            mailHandler.handleAll(inbox.getMessages());
+//            mailHandler.handleAll(inbox.getMessages());
 
             IdleThread idleThread = new IdleThread(inbox, username, password);
             idleThread.setDaemon(false);
