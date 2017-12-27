@@ -3,19 +3,20 @@ package de.tum.data;
 import de.tum.models.Stock;
 import de.tum.models.StockValue;
 import de.tum.utils.Formatters;
-import org.w3c.dom.ranges.Range;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static de.tum.data.RangeType.*;
 import static de.tum.utils.Formatters.dateFormat;
 
 public class StockStat {
 
+    @Getter
     private final Stock stock;
     private final List<StockValue> stockValues;
 
@@ -24,23 +25,50 @@ public class StockStat {
         this.stockValues = stock.getStockValues();
     }
 
+    public HashMap<String, Object> getDefaultValues() {
+        HashMap<String, Object> map = new LinkedHashMap<>();
+        map.put("stock", stock.toDto());
+        map.put("values", Arrays.asList(
+                getValue(SIX_MONTHS),
+                getValue(THREE_MONTHS),
+                getValue(ONE_MONTH),
+                getValue(ONE_WEEK),
+                getValue(YESTERDAY)
+        ));
+        return map;
+    }
+
     public StockValueRange getValue(RangeType rangeType) {
         StockValue value = getValueByRange(rangeType);
         StockValue currentvalue = stockValues.get(0);
 
-        Double absoluteDiff = currentvalue.getRealValue() - value.getRealValue();
-        Double relativeDiff = absoluteDiff / value.getRealValue() * 100;
+        Double absoluteDiff;
+        Double relativeDiff;
+
+        if (value == null || currentvalue == null) {
+            absoluteDiff = 0d;
+            relativeDiff = 0d;
+        } else {
+            absoluteDiff = currentvalue.getRealValue() - value.getRealValue();
+            relativeDiff = absoluteDiff / value.getRealValue() * 100;
+        }
+
 
         return StockValueRange.builder()
-                .date(value.getDate())
+                .rangeType(rangeType)
+                .date(value != null ? value.getDate() : null)
                 .absoluteDiff(Formatters.numberFormat.format(absoluteDiff))
                 .relativeDiff(Formatters.numberFormat.format(relativeDiff))
+                .relativeDiffRaw(relativeDiff)
                 .build();
     }
 
     private StockValue getValueByRange(RangeType rangeType) {
         LocalDate now = LocalDate.now();
         switch (rangeType) {
+            case SIX_MONTHS:
+                now = now.minusMonths(6);
+                break;
             case THREE_MONTHS:
                 now = now.minusMonths(3);
                 break;
@@ -62,7 +90,7 @@ public class StockStat {
     }
 
     public String toString() {
-        StockValueRange m3 = getValue(RangeType.THREE_MONTHS);
+        StockValueRange m3 = getValue(THREE_MONTHS);
         StockValueRange w1 = getValue(RangeType.ONE_WEEK);
         StockValueRange yesterday = getValue(RangeType.YESTERDAY);
 

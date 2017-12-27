@@ -1,6 +1,7 @@
 import React from "react";
 import {Route, Switch} from "react-router-dom";
 import * as MobileDetect from "mobile-detect";
+import Overview from "./basic/Overview";
 
 export default class Layout extends React.Component {
 
@@ -25,7 +26,7 @@ export default class Layout extends React.Component {
                 <div style={mobileStyle}>
                     <div style={{padding: "1rem"}}>
                         <Switch>
-                            {/*<Route path='/home' component={Home}/>*/}
+                            <Route path='/' component={Overview}/>
                             <Route render={() => <h1>Not found</h1>}/>
                         </Switch>
                     </div>

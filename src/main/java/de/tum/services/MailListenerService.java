@@ -55,7 +55,7 @@ public class MailListenerService {
             });
 
             asyncRunner.startImapThread(inbox, username, password);
-            asyncRunner.checkExistingMails(inbox, username, password);
+//            asyncRunner.checkExistingMails(inbox, username, password);
 
         } catch (Exception e) {
             if (e instanceof InterruptedException) {

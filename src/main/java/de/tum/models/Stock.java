@@ -1,14 +1,13 @@
 package de.tum.models;
 
 
+import de.tum.utils.StockDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.core.annotation.Order;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,6 +31,10 @@ public class Stock {
 
     public String toString() {
         return Stream.of("[STOCK]: ", isin, type, name).collect(Collectors.joining(" "));
+    }
+
+    public StockDto toDto() {
+        return StockDto.builder().isin(isin).type(type).name(name).build();
     }
 
 }
