@@ -18,7 +18,8 @@ export default class Overview extends React.Component {
     }
 
     getColor(bigVal, thisVal) {
-        console.log(bigVal, thisVal);
+        if (thisVal === 0)
+            return "white";
         const val = Math.max(0, thisVal / bigVal * (this.colorMaxVal - this.colorMinVal) + this.colorMinVal);
         return `hsl(${val}, 68%, 80%)`
     }
@@ -40,10 +41,10 @@ export default class Overview extends React.Component {
             const stock = row.stock;
             const vals = row.values.map((val, index) => {
                 const color = this.getColor(biggestVals[index], val.relativeDiffRaw);
-                console.log(val);
+                const outputValue = val.relativeDiffRaw !== 0 ? val.relativeDiff + " %" : "-";
                 return (
                     <Table.Cell style={{backgroundColor: color}}>
-                        {val.relativeDiff} %<br/>
+                        {outputValue}<br/>
                         {/*<i>{val.absoluteDiff}</i>*/}
                     </Table.Cell>
                 )

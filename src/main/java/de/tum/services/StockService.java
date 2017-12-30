@@ -50,7 +50,7 @@ public class StockService {
 
         StockValue stockValue = stockValueRepository.findByStockIsinAndDate(isin, parsedDate);
         if (stockValue == null) {
-            Long parsedValue = null;
+            Long parsedValue = 0L;
             try {
                 parsedValue = Math.round(numberFormat.parse(value).doubleValue() * 1000);
             } catch (ParseException e) {
