@@ -25,7 +25,11 @@ public class BasicApiController {
     public List<HashMap<String, Object>> getStats() {
         List<Stock> stocks = stockRepository.findAll();
 
-        List<HashMap<String, Object>> stockMap = stocks.stream().map(StockStat::new).map(StockStat::getDefaultValues).sorted(Comparator.comparing(s -> ((StockDto) s.get("stock")).isin)).collect(Collectors.toList());
+        List<HashMap<String, Object>> stockMap = stocks.stream()
+                                                       .map(StockStat::new)
+                                                       .map(StockStat::getDefaultValues)
+                                                       .sorted(Comparator.comparing(s -> ((StockDto) s.get("stock")).isin))
+                                                       .collect(Collectors.toList());
 
         return stockMap;
 

@@ -20,7 +20,7 @@ export default class Overview extends React.Component {
     getColor(bigVal, thisVal) {
         if (thisVal === 0)
             return "white";
-        const val = Math.max(0, thisVal / bigVal * (this.colorMaxVal - this.colorMinVal) + this.colorMinVal);
+        const val = Math.max(-2, thisVal / bigVal * (this.colorMaxVal - this.colorMinVal) + this.colorMinVal);
         return `hsl(${val}, 68%, 80%)`
     }
 
@@ -36,6 +36,7 @@ export default class Overview extends React.Component {
         biggestVals.push(Math.max.apply(Math, data.map(d => d.values[3].relativeDiffRaw)));
         biggestVals.push(Math.max.apply(Math, data.map(d => d.values[4].relativeDiffRaw)));
 
+        const highestmomentum = Math.max.apply(Math, data.map(d => d.momentum));
 
         const tableRows = data.map(row => {
             const stock = row.stock;
@@ -49,6 +50,8 @@ export default class Overview extends React.Component {
                     </Table.Cell>
                 )
             });
+            const momentum = Math.round(row.momentum * 100) / 100;
+            const momentumColor = this.getColor(highestmomentum, momentum);
 
             return (
                 <Table.Row>
@@ -60,6 +63,9 @@ export default class Overview extends React.Component {
                         <i>{stock.isin}</i>
                     </Table.Cell>
                     {vals}
+                    <Table.Cell style={{backgroundColor: momentumColor}}>
+                        {momentum}
+                    </Table.Cell>
                 </Table.Row>
             )
         });
@@ -76,6 +82,7 @@ export default class Overview extends React.Component {
                             <Table.HeaderCell>Ein Monat</Table.HeaderCell>
                             <Table.HeaderCell>Eine Woche</Table.HeaderCell>
                             <Table.HeaderCell>Seit Gestern</Table.HeaderCell>
+                            <Table.HeaderCell>Momentum</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>

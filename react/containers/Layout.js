@@ -9,7 +9,8 @@ export default class Layout extends React.Component {
 
         const isMobile = new MobileDetect(window.navigator.userAgent).mobile();
 
-        const mobileStyle = !isMobile ? {marginLeft: "10rem"} : {};
+        // const mobileStyle = !isMobile ? {marginLeft: "10rem"} : {};
+        const mobileStyle = {};
 
         let profileStyle = {};
 
