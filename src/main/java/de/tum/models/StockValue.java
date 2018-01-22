@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,7 +28,7 @@ public class StockValue {
     @JoinColumn(name = "stock_isin")
     private Stock stock;
 
-    private Date date;
+    private LocalDate date;
 
     private Long value; // in 1 / 1000 Euro
 
