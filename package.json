@@ -4,6 +4,7 @@
   "description": "Accounting App: Track your finances!",
   "scripts": {
     "dev": "webpack-dev-server",
+    "webpack": "webpack",
     "lint": "eslint src",
     "prebuild": "rimraf static/app",
     "build": "cross-env NODE_ENV=production webpack -p --config webpack.config.production.js"

@@ -39,7 +39,7 @@ public class Stock {
     }
 
     public StockInfo toStockInfo() {
-        return StockInfo.builder().isin(this.isin).type(this.type).build();
+        return StockInfo.builder().isin(this.isin).type(this.type).name(name).build();
     }
 
 }

@@ -13,7 +13,7 @@ public class MainController {
     @Autowired
     private StockRepository stockRepository;
 
-    @GetMapping
+    @GetMapping("/")
     public String helloWorld() {
 
 //        List<Stock> stocks = stockRepository.findAll();

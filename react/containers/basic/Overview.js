@@ -17,10 +17,10 @@ export default class Overview extends React.Component {
         this.colorMinVal = 0;
     }
 
-    getColor(bigVal, thisVal) {
+    getColor(bigVal, lowVal, thisVal) {
         if (thisVal === 0)
             return "white";
-        const val = Math.max(-2, thisVal / bigVal * (this.colorMaxVal - this.colorMinVal) + this.colorMinVal);
+        const val = Math.max(-2, (thisVal - lowVal) / (bigVal - lowVal) * (this.colorMaxVal - this.colorMinVal) + this.colorMinVal);
         return `hsl(${val}, 68%, 80%)`
     }
 
@@ -29,19 +29,22 @@ export default class Overview extends React.Component {
         const data = this.props.overview.overviewData;
 
         let biggestVals = [];
+        let smallestVals = [];
 
-        biggestVals.push(Math.max.apply(Math, data.map(d => d.values[0].relativeDiffRaw)));
-        biggestVals.push(Math.max.apply(Math, data.map(d => d.values[1].relativeDiffRaw)));
-        biggestVals.push(Math.max.apply(Math, data.map(d => d.values[2].relativeDiffRaw)));
-        biggestVals.push(Math.max.apply(Math, data.map(d => d.values[3].relativeDiffRaw)));
-        biggestVals.push(Math.max.apply(Math, data.map(d => d.values[4].relativeDiffRaw)));
+        [0, 1, 2, 3, 4].map((i) => {
+            biggestVals.push(Math.max.apply(Math, data.map(d => d.values[i].relativeDiffRaw)));
+            smallestVals.push(Math.min.apply(Math, data.map(d => d.values[i].relativeDiffRaw)));
+        });
 
-        const highestmomentum = Math.max.apply(Math, data.map(d => d.momentum));
+
+        const highestmomentum = Math.max.apply(Math, data.map(d => Math.round(d.momentum * 100) / 100));
+        const lowestmomentum = Math.min.apply(Math, data.map(d => Math.round(d.momentum * 100) / 100));
+
 
         const tableRows = data.map(row => {
             const stock = row.stock;
             const vals = row.values.map((val, index) => {
-                const color = this.getColor(biggestVals[index], val.relativeDiffRaw);
+                const color = this.getColor(biggestVals[index], smallestVals[index], val.relativeDiffRaw);
                 const outputValue = val.relativeDiffRaw !== 0 ? val.relativeDiff + " %" : "-";
                 return (
                     <Table.Cell style={{backgroundColor: color}}>
@@ -50,8 +53,9 @@ export default class Overview extends React.Component {
                     </Table.Cell>
                 )
             });
+
             const momentum = Math.round(row.momentum * 100) / 100;
-            const momentumColor = this.getColor(highestmomentum, momentum);
+            const momentumColor = this.getColor(highestmomentum, lowestmomentum, momentum);
 
             return (
                 <Table.Row>
@@ -59,8 +63,10 @@ export default class Overview extends React.Component {
                         <Statistic label={stock.type}/>
                     </Table.Cell>
                     <Table.Cell>
-                        <b>{stock.name}</b><br/>
                         <i>{stock.isin}</i>
+                    </Table.Cell>
+                    <Table.Cell>
+                        <b>{stock.name}</b>
                     </Table.Cell>
                     {vals}
                     <Table.Cell style={{backgroundColor: momentumColor}}>
@@ -76,6 +82,7 @@ export default class Overview extends React.Component {
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>WP-Art</Table.HeaderCell>
+                            <Table.HeaderCell>ISIN</Table.HeaderCell>
                             <Table.HeaderCell>WP</Table.HeaderCell>
                             <Table.HeaderCell>Sechs Monate</Table.HeaderCell>
                             <Table.HeaderCell>Drei Monate</Table.HeaderCell>

@@ -2,7 +2,7 @@ package de.tum.data;
 
 import lombok.Builder;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Builder
 public class StockValueRange {
@@ -11,6 +11,6 @@ public class StockValueRange {
     public String absoluteDiff;
     public String relativeDiff;
     public Double relativeDiffRaw;
-    public Date date;
+    public LocalDate date;
 
 }

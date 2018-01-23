@@ -7,5 +7,6 @@ public class StockInfo {
 
     public String isin;
     public String type;
+    public String name;
 
 }

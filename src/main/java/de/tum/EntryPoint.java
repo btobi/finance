@@ -14,7 +14,7 @@ public class EntryPoint {
 
     @PostConstruct
     public void run() {
-        mailListenerService.runListener();
+//        mailListenerService.runListener();
     }
 
 }

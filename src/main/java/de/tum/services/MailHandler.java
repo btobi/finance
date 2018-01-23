@@ -14,7 +14,6 @@ import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.MimeBodyPart;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
@@ -93,7 +92,7 @@ public class MailHandler {
         String fileName = part.getFileName();
         br = new BufferedReader(new InputStreamReader(part.getInputStream()));
         line = br.readLine();
-        String stockDate = clean(line.split(";")[0]).replace("Depotbewertung vom", "");
+        String stockDate = clean(line.split(";")[0].replace("Depotbewertung vom", ""));
 
         while (!br.readLine().startsWith("\"WP-Art\""));
         while ((line = br.readLine()) != null) {
@@ -110,7 +109,7 @@ public class MailHandler {
     }
 
     private static String clean(String val) {
-        return val.replaceAll("^\"|\"$", "");
+        return val.replaceAll("^\"|\"$", "").trim();
     }
 
 }

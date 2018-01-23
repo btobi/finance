@@ -1,10 +1,12 @@
 package de.tum.finance;
 
 import de.tum.models.StockValue;
-import org.apache.commons.math3.fitting.leastsquares.LeastSquaresProblem;
+import lombok.Getter;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DataCollector {
 
@@ -12,9 +14,8 @@ public class DataCollector {
     private Map<String, Map<LocalDate, Long>> stockMap = new HashMap<>();
     private Map<String, StockInfo> stocks = new HashMap<>();
 
-    private List<EvaluationStrategy> strategies = Arrays.asList(
-            new RelativeStrengthStrategy()
-    );
+    @Getter
+    private RelativeStrengthStrategy relativeStrengthStrategy = new RelativeStrengthStrategy();
 
     public DataCollector(List<StockValue> stockValues) {
 
@@ -30,12 +31,10 @@ public class DataCollector {
 
             stocks.put(stockValue.getStock().getIsin(), stockValue.getStock().toStockInfo());
 
-            strategies.get(0).evaluate(this.timeMap, this.stockMap, this.stocks);
-
-            strategies.forEach(s -> s.evaluate(this.timeMap, this.stockMap, this.stocks));
 
         }
 
+        this.relativeStrengthStrategy.evaluate(this.timeMap, this.stockMap, this.stocks);
 
     }
 

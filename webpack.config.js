@@ -23,7 +23,7 @@ module.exports = {
         filename: "bundle.js",
         // the output bundle
 
-        path: path.resolve(__dirname, "dist"),
+        path: path.resolve(__dirname, "src/main/resources/bundle"),
 
         publicPath: "http://localhost:3000/assets/bundles/"
 

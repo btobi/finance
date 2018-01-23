@@ -7,7 +7,7 @@
 <body>
 <div id="root"></div>
 
-<script src="http://localhost:3000/assets/bundles/bundle.js"></script>
+<script src="/resources/bundle.js"></script>
 
 </body>
 

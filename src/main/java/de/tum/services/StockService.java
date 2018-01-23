@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Locale;
 
 @Service
@@ -39,14 +39,9 @@ public class StockService {
             log.debug("StockInfo already exists in db: {}", stock.toString());
         }
 
-        Date parsedDate = null;
+        LocalDate parsedDate;
 
-        try {
-            parsedDate = Formatters.dateFormatLong.parse(date);
-            log.debug("{} {}", parsedDate, date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        parsedDate = LocalDate.parse(date, Formatters.dateFormatLong);
 
         StockValue stockValue = stockValueRepository.findByStockIsinAndDate(isin, parsedDate);
         if (stockValue == null) {

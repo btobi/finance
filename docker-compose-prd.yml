@@ -1,0 +1,20 @@
+version: "2"
+services:
+
+  app:
+    image: "btobias92/finance:latest"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+
+  # Postgresql Database
+  db:
+    image: "skalera/postgres:latest"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "finance"
+      POSTGRES_PASSWORD: "finance"
+      POSTGRES_DB: "finance"

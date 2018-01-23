@@ -1,10 +1,9 @@
 package de.tum.finance;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StockOperator {
@@ -30,7 +29,7 @@ public class StockOperator {
         return this;
     }
 
-    public StockOperator filterValues(List<String> stocks) {
+    public StockOperator filterValues(Set<String> stocks) {
         timeMap = timeMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().entrySet().stream().filter(v -> stocks.contains(v.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))));
         return this;
     }

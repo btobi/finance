@@ -2,14 +2,15 @@ package de.tum.data;
 
 import de.tum.models.Stock;
 import de.tum.models.StockValue;
-import de.tum.utils.DateUtils;
 import de.tum.utils.Formatters;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -91,10 +92,12 @@ public class StockStat {
         }
 
 
-        Date date = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return filterValues(now);
 
-        return stockValues.stream().filter(p -> p.getDate().before(date)).findFirst().orElse(null);
+    }
 
+    private StockValue filterValues(LocalDate now) {
+        return stockValues.stream().filter(p -> p.getDate().isBefore(now)).findFirst().orElse(null);
     }
 
     private double getMomentum(int weeksMinor, int weeksMajor) {
@@ -112,8 +115,8 @@ public class StockStat {
 
     private double getAverage(LocalDate from, LocalDate to) {
         return stockValues.stream()
-                          .filter(p -> p.getDate().after(DateUtils.localDatetoDate(from)))
-                          .filter(p -> p.getDate().before(DateUtils.localDatetoDate(to)))
+                          .filter(p -> p.getDate().isAfter(from))
+                          .filter(p -> p.getDate().isBefore(to))
                           .mapToDouble(StockValue::getRealValue)
                           .average()
                           .orElse(99999999d);
