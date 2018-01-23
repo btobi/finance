@@ -2,6 +2,7 @@ package de.tum.controllers;
 
 import de.tum.data.StockStat;
 import de.tum.finance.DataCollector;
+import de.tum.finance.RelativeStrengthStrategy;
 import de.tum.models.Stock;
 import de.tum.repositories.StockRepository;
 import de.tum.repositories.StockValueRepository;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -42,10 +42,10 @@ public class BasicApiController {
     }
 
     @GetMapping("/return")
-    public Map<String, Double> getReturn() {
+    public RelativeStrengthStrategy getReturn() {
 
         DataCollector dataCollector = new DataCollector(stockValueRepository.findAll());
-        return dataCollector.getRelativeStrengthStrategy().getSortedRelativeReturns();
+        return dataCollector.getRelativeStrengthStrategy();
 
     }
 

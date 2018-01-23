@@ -23,6 +23,12 @@ public class RelativeStrengthStrategy extends EvaluationStrategy {
     @Getter
     private Map<String, Double> relativeReturns = new HashMap<>();
 
+    @Getter
+    private Map<String, Double> standardDeviationByStock = new HashMap<>();
+
+    @Getter
+    private Double standardDeviationPortfolio;
+
     private Map<String, StockInfo> stockInfo;
 
     @Override
@@ -34,10 +40,15 @@ public class RelativeStrengthStrategy extends EvaluationStrategy {
 
         for (String stock : stocks.keySet()) {
             double stockReturn = Utils.calculatePerformance(timeMap, t1, t2, stock);
-            this.stockReturns.put(stockInfo.get(stock).name, stockReturn);
-            this.relativeReturns.put(stockInfo.get(stock).name, stockReturn / this.portfolioReturn);
+//            this.stockReturns.put(stock + " " + stockInfo.get(stock).name, stockReturn);
+            this.stockReturns.put(stock, stockReturn);
+//            this.relativeReturns.put(stock + " " + stockInfo.get(stock).name, stockReturn / this.portfolioReturn);
+            this.relativeReturns.put(stock, stockReturn / this.portfolioReturn);
         }
 
+        StockOperator interval = StockOperator.init(timeMap).inInterval(t1, t2).filterValues(stocks.keySet());
+        this.standardDeviationByStock = interval.getStandardDeviationByStock();
+        this.standardDeviationPortfolio = interval.getStandardDeviationByPortfolio();
 
     }
 
