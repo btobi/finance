@@ -33,10 +33,10 @@ public class StockService {
         Stock stock = stockRepository.findByIsin(isin);
         if (stock == null) {
             stock = Stock.builder().isin(isin).type(type).name(name).build();
-            log.info("Save new Stock {}", stock.toString());
+            log.info("Save new StockInfo {}", stock.toString());
             stockRepository.save(stock);
         } else {
-            log.debug("Stock already exists in db: {}", stock.toString());
+            log.debug("StockInfo already exists in db: {}", stock.toString());
         }
 
         Date parsedDate = null;
@@ -57,7 +57,7 @@ public class StockService {
                 e.printStackTrace();
             }
             stockValue = StockValue.builder().stock(stock).date(parsedDate).value(parsedValue).build();
-            log.info("Save new Stock Value {}", stockValue.toString());
+            log.info("Save new StockInfo Value {}", stockValue.toString());
             stockValueRepository.save(stockValue);
         } else {
             log.debug("StockValue already exists in db: {}", stockValue.toString());

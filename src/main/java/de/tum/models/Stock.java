@@ -1,6 +1,7 @@
 package de.tum.models;
 
 
+import de.tum.finance.StockInfo;
 import de.tum.utils.StockDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,10 @@ public class Stock {
 
     public StockDto toDto() {
         return StockDto.builder().isin(isin).type(type).name(name).build();
+    }
+
+    public StockInfo toStockInfo() {
+        return StockInfo.builder().isin(this.isin).type(this.type).build();
     }
 
 }
